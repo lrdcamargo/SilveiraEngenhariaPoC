@@ -27,7 +27,7 @@ data = load_data('DRE_2023_2024_Concatenado.csv')
 # Após carregar e preparar os dados, adicione uma coluna para indicar se os dados são realizados ou previstos
 data['Status'] = data['Mês'].apply(lambda x: 'Previsto' if x.year >= 2024 and x.month >= 2 and x.day >=27 else 'Realizado')
 # Dashboard layout
-st.title('Dashboard Estratégico e Tático')
+st.title('Silveira Engenharia - Dashboard de DRE')
 st.sidebar.title('Filtros')
 
 # Filtros dinâmicos no sidebar
