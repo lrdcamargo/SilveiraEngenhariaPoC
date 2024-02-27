@@ -3,7 +3,9 @@
 
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 # Carregar e preparar os dados
 @ st.cache_data
@@ -65,20 +67,23 @@ id_para_nome = {
 # Substituindo IDs pelos nomes correspondentes
 dados_agregados['Nome Empreendimento'] = dados_agregados['ID Empreendimento'].map(id_para_nome)
 
-# Atualizando os gráficos para utilizar os dados agregados
-
-# Gráfico de Receita Líquida por ID Empreendimento ao Longo do Tempo
-fig_receita_liquida = px.line(dados_agregados, x='Mês', y='Receita Líquida', color='Nome Empreendimento',
-                              title='Evolução da Receita Líquida por Empreendimento')
-st.plotly_chart(fig_receita_liquida, use_container_width=True)
+fig_receita_liquida, ax = plt.subplots()
+for empreendimento in dados_agregados['Nome Empreendimento'].unique():
+    df_temp = dados_agregados[dados_agregados['Nome Empreendimento'] == empreendimento]
+    ax.plot(df_temp['Mês'], df_temp['Receita Líquida'], label=empreendimento)
+ax.set_title('Evolução da Receita Líquida por Empreendimento')
+ax.set_xlabel('Mês')
+ax.set_ylabel('Receita Líquida')
+ax.legend()
+st.pyplot(fig_receita_liquida)
 
 # Gráfico de Lucro Líquido por ID Empreendimento ao Longo do Tempo
-fig_lucro_liquido = px.line(dados_agregados, x='Mês', y='Lucro Líquido', color='Nome Empreendimento',
-                            title='Evolução do Lucro Líquido por Empreendimento')
-st.plotly_chart(fig_lucro_liquido, use_container_width=True)
-
-# Gráfico de Margem de Lucro por ID Empreendimento
-fig_margem_lucro = px.bar(dados_agregados, x='Mês', y='Margem de Lucro', color='Nome Empreendimento',
-                          title='Margem de Lucro por Empreendimento')
-st.plotly_chart(fig_margem_lucro, use_container_width=True)
-
+fig_lucro_liquido, ax = plt.subplots()
+for empreendimento in dados_agregados['Nome Empreendimento'].unique():
+    df_temp = dados_agregados[dados_agregados['Nome Empreendimento'] == empreendimento]
+    ax.plot(df_temp['Mês'], df_temp['Lucro Líquido'], label=empreendimento)
+ax.set_title('Evolução do Lucro Líquido por Empreendimento')
+ax.set_xlabel('Mês')
+ax.set_ylabel('Lucro Líquido')
+ax.legend()
+st.pyplot(fig_lucro_liquido)
